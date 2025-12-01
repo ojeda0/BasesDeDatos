@@ -29,7 +29,7 @@ create table Reservas(
 	Localizador char(6) primary key,
     Fecha_checkin date,
     Precio_coste decimal(5,2),
-    Precio_venta decimal(5,2),
+    Precio_venta decimal(16,2),
     ID_proveedor bigint,
     ID_agente bigint,
     constraint fk_reservas_proveedores foreign key (ID_proveedor) references Proveedores(ID),
@@ -78,8 +78,8 @@ update Agentes set ID=7 where ID=2;
 select * from Reservas;
 
 -- Ejercicio 5, agregar nuevo tipo de agente
-alter table Agentes drop constraint check_tipo;
 alter table Agentes modify Tipo char(2);
+alter table Agentes drop constraint check_tipo;
 alter table Agentes add constraint check_tipo check (upper(Tipo) in ('C','N','ST'));
 
 select * from Agentes;
