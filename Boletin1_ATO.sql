@@ -91,7 +91,7 @@ create table Historial_laboral(
 
 describe Historial_laboral;
 
--- Ejercicio 2 insertar registros
+-- Ejercicio 2 insertar registros, 3 por cada tabla
 insert into empresa_boletin1.Empleados 
 values
 	('53257665S', 'Juan', 'de la Palmilla', 'Julay', 'C/ Compi, Nº20', 'Málaga', 'La Palmilla', '29590', 'H', '1978-09-25'),
@@ -99,3 +99,91 @@ values
     ('E67099002', 'Mario', 'García', 'Santos', 'C/ Laureano, Nº30', 'Sevilla', 'El Viso del Alcor', '41520', 'H', '2005-03-18');
     
 select * from Empleados;
+
+insert into empresa_boletin1.Historial_salarial(DNI_empl, Salario, Fecha_inicio)
+values
+	('53257665S', 2000.00, '2025-01-20'),
+    ('Y1158354L', 1500.00, '2025-02-15'),
+    ('E67099002', 1200.00, '2025-01-29');
+    
+select * from Historial_salarial;
+
+insert into empresa_boletin1.Departamento(Nombre, DNI_jefe, Presupuesto)
+values
+	('La ofi', '53257665S', 5000.00),
+    ('Marketing', 'Y1158354L', 9000.00),
+    ('Toplane', 'E67099002', 7000.00);
+    
+select * from Departamento;
+
+insert into empresa_boletin1.Universidad(Nombre, Ciudad, Cod_postal)
+values
+	('Grieta del Invocador', 'Zaun', '54321'),
+    ('Botlane', 'Noxus', '41321'),
+    ('Midlane', 'Piltover', '41123');
+    
+select * from Universidad;
+
+insert into empresa_boletin1.Estudio(DNI_empl, Cod_univ, Titulo, Especialidad)
+values
+	('53257665S', 1, 'El más mejor', 'Ser el mejor'),
+    ('Y1158354L', 2, 'El King', 'Ser el king'),
+    ('E67099002', 3, 'Top inters EUW', 'Mario Creation');
+    
+select * from Estudio;
+
+insert into empresa_boletin1.Trabajo(Nombre, Salario_max, Salario_min)
+values
+	('Grietero', 4000.00, 1000.00),
+    ('Inter', 1000.00, 500.00),
+    ('Troll', 1000.00, 500.00);
+    
+select * from Trabajo;
+
+insert into empresa_boletin1.Historial_laboral(DNI_empl, Cod_trabajo, Cod_dpto, Fecha_inicio, DNI_super)
+values
+	('53257665S', 1, 1, '2025-02-20', 'E67099002'),
+    ('Y1158354L', 2, 2, '2025-02-15', 'E67099002'),
+    ('E67099002', 3, 3, '2025-02-02', 'Y1158354L');
+    
+select * from Historial_laboral;
+    
+-- No podemos insertar ya que da error en el sexo, por el check de H, M. Cambiamos la P por H.
+insert into empresa_boletin1.Empleados(DNI, Nombre, Apellido1, Apellido2, Sexo)
+values
+	('111222', 'Sergio', 'Palma', 'Entrena', 'H'),
+    ('222333', 'Lucía', 'Ortega', 'Plus', null);
+    
+select * from Empleados;
+
+-- No podemos insertar ya que da error al ser null el cod_trabajo y cod_dpto, forman parte de la clave.
+-- También tenemos un problema de integridad referencial, ya que no tenemos creado el cod_trabajo y cod_dpto creados en ninguna tabla.
+-- insert into empresa_boletin1.Historial_laboral
+-- values
+	-- ('111222', null, null, '1996-06-16', null, '222333');
+    
+-- select * from Historial_laboral;
+
+-- Ahora vamos a eliminar los 2 empleados que hemos insertado
+delete from Empleados where DNI='111222';
+delete from Empleados where DNI='222333';
+
+select * from Empleados;
+
+-- Ejercicio 3 modificar tablas y columnas
+alter table Trabajo add column Dificultad char(1);
+alter table Trabajo add constraint check_dificultad check (Dificultad between '1' and '5');
+
+describe Trabajo;
+
+alter table Departamento add column Planta int default 0;
+alter table Departamento add column Numero_puerta int default 1;
+
+select * from Departamento;
+
+alter table Empleados add constraint check_sevilla check ((Ciudad != 'Sevilla') or (Ciudad = 'Sevilla' and Fecha_nac is not null));
+alter table Empleados rename column Municipio to Localidad;
+
+describe Empleados;
+
+alter table Historial_salarial add constraint check_salario check (Salario >= 0);
