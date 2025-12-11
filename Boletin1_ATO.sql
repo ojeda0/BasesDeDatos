@@ -187,3 +187,41 @@ alter table Empleados rename column Municipio to Localidad;
 describe Empleados;
 
 alter table Historial_salarial add constraint check_salario check (Salario >= 0);
+
+-- A partir de aqui es copiado del octavio ctrl c  ctrl v
+
+select * from Empleados;
+
+-- (PRUEBA QUE FALLA) Ejemplo de insert que viola la restriccion creada anteriormente
+-- insert into Empleados values 
+	-- ('34567990C', 'Pedro', 'Lopez', 'Ruiz', 'C/ Luna 5', 'Sevilla', 'Sevilla', '41001', 'M', null);
+    
+-- (PRUEBA QUE NO FALLA) Ejemplo de insert valido
+insert into Empleados values 
+	('34567990C', 'Pedro', 'Lopez', 'Ruiz', 'C/ Luna 5', 'Sevilla', 'Sevilla', '41001', 'M', '1991-01-23');
+
+-- Vamos a tratar de saltarnos la restriccion tocando solo la fecha_nac
+select * from Empleados;
+-- update Empleados set fecha_nac = null where dni = '34567990C';
+
+alter table Empleados;
+
+alter table Departamento add constraint chk_presupuesto_positivo check (presupuesto >= 0); -- Alla donde haya un valor economico
+
+-- Se pueden aplicar varios cambios en una misma consulta
+-- alter table Empleados
+	-- modify nombre varchar(20) null, -- añadimos el null para asegurarnos que pilla la restriccion "nulable" es equivalente a no ponerlo
+    -- modify direccion varchar(50), -- Al no tener que cambiar el nombre usamos modify
+    -- rename column municipio to localidad; -- Forma actual de hacerlo (No necesita redefinir el tipo)
+    
+-- Forma anterior de hacerlo (necesita redefinirlo completamente). Solo aplica al cambio de municipio -> localidad
+-- alter table empleado change municipio localidad int;
+
+-- drop table estudio;
+-- drop table universidad;
+
+alter table estudio drop constraint fk_estudio_universidad;
+alter table estudio add constraint fk_estudio_universidad foreign key (cod_univ) references universidad(cod_univ) on update cascade;
+update universidad set cod_univ = 7 where cod_univ = 1;
+
+select * from estudio;
