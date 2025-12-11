@@ -188,7 +188,7 @@ describe Empleados;
 
 alter table Historial_salarial add constraint check_salario check (Salario >= 0);
 
--- A partir de aqui es copiado del octavio ctrl c  ctrl v
+-- A partir de aqui es copiado del octavio ctrl c + ctrl v
 
 select * from Empleados;
 
