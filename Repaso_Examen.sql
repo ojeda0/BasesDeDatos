@@ -145,3 +145,70 @@ create table marca(
 -- describe marca;
 
 -- Insertar datos
+insert into provincia(nombre, pais)
+values
+	('Sevilla', 'España'),
+    ('Murcia', 'España');
+    
+insert into localidad(nombre, cod_postal, id_provincia)
+values
+	('Alcalá de Guadaíra', '41500', 1),
+    ('Alhama', '50200', 2);
+    
+insert into club(sede, num_socios, nombre)
+values
+	('Central', 100, 'Grieta del Pescador'),
+    ('Secundaria', 40, 'Pescabichos');
+
+insert into pescador(dni, fecha_nac, nombre, apellidos, telefono, dni_maestro, id_localidad, id_club)
+values
+	('30044402C', '2001-06-13', 'Jax', 'El Pescador', '+34 675453187', null, 1, 1),
+    ('40055502P', '2001-07-15', 'Juanito', 'de la Palmilla', '+34 684576312', '30044402C', 2, 2);
+    
+insert into especie(nombre_comun, nombre_cientifico, origen)
+values
+	('Trucha', 'Carpe Diem', 'Agua'),
+    ('Pez globo', 'Globis Gordis', 'Agua');
+    
+insert into senuelo(nombre, marca, precio)
+values
+	('Rojo grande', 'Nike', 19.99),
+    ('Azul pequeño', 'Adidas', 15.99);
+    
+insert into embalse(nombre, capacidad, porcentaje_nivel, anyo_presa, id_localidad)
+values
+	('Embalse Willy', 200, 70.5, 2006, 1),
+    ('Embalse Washington', 100, 30.4, 2010, 2);
+    
+insert into captura(dni_pescador, id_especie, id_senuelo, id_embalse, fecha_hora, peso, desde_orilla, tamanyo)
+values
+	('30044402C', 1, 1, 1, '2025-12-03', 55.45, true, 10.50),
+    ('40055502P', 2, 2, 2, '2025-12-10', 40.25, false, 15.50),
+    ('30044402C', 1, 2, 1, '2025-12-11', 50.20, true, 12.60);
+    
+select * from pescador;
+select * from especie;
+select * from senuelo;
+select * from embalse;
+select * from captura;
+
+alter table embalse rename column porcentaje_nivel to nivel_actual;
+
+select * from embalse;
+
+alter table captura drop constraint fk_captura_embalse;
+alter table captura add constraint fk_captura_embalse foreign key (id_embalse) references embalse(id) on delete cascade;
+delete from embalse where id=1;
+
+select * from embalse;
+
+alter table captura drop constraint fk_captura_pescador;
+alter table captura add constraint fk_captura_pescador foreign key (dni_pescador) references pescador(dni) on update cascade;
+alter table licencia drop constraint fk_licencia_pescador;
+alter table licencia add constraint fk_licencia_pescador foreign key (dni_pescador) references pescador(dni) on update cascade;
+alter table pescador drop constraint fk_pescador_pescador;
+alter table pescador add constraint fk_pescador_pescador foreign key (dni_maestro) references pescador(dni) on update cascade;
+-- update pescador set dni='60077703L' where dni='30044402C';
+
+select * from pescador;
+select * from captura;
