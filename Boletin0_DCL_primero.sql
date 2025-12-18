@@ -14,3 +14,41 @@
     
 -- EJ 5. Muestra los permisos asociados al usuario conectado a la base de datos
 	show grants for current_user(); -- Lo hacemos como administrador
+    
+-- EJ 6. Crea una tabla “Alumno” que contenga dos campos Identificador y nombre e introduce 5 registros
+
+	-- Creamos la cabecera para metes los datos
+    drop database if exists boletin0_dcl;
+    create database boletin0_dcl;
+    use boletin0_dcl;
+    
+	create table alumno(
+		id bigint primary key auto_increment,
+        nombre varchar(250)
+    );
+    
+    insert into alumno (nombre) 
+    values
+		('Abraham'),
+        ('Mario'),
+        ('Agustín'),
+        ('Miguel'),
+        ('Rubén');
+        
+	select * from alumno;
+
+-- EJ 7. Crea la tabla comentarios que tenga 3 campos, Identificador, comentario y alumno relacionado (fk) e introduce tres comentarios.
+    create table comentario(
+		id bigint primary key auto_increment,
+		comentario varchar(250),
+        id_alumno bigint,
+        constraint fk_comentario_alumno foreign key (id_alumno) references alumno(id)
+    );
+    
+    insert into comentario (comentario, id_alumno)
+    values
+		('Juanito de la Palmilla el king', 1),
+        ('Mario creation de manual', 2),
+        ('Lolito de manual', 3);
+        
+	select * from comentario;
