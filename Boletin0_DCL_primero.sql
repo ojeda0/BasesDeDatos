@@ -64,7 +64,6 @@
 	select * from comentario;
 
 -- EJ 8. Crea la vista llamado comentarios_por_alumno que muestre un listado de comentarios realizados por alumnos
-	
     create or replace view comentarios_por_alumno as
 		select 
 			comentario.id id_comentario, 
@@ -73,11 +72,24 @@
 			alumno.nombre
         from comentario, alumno 
         where comentario.id_alumno = alumno.id
-	;
+	; -- Lo hacemos como administrador
     
     -- select * from comentarios_por_alumno;
     
 -- EJ 9. Quita a tu usuario los permisos para realizar consultas sobre la vista e intenta realizar una llamada a la vista anterior.
-	
-	-- revoke select on *.* from 'administrador'@'localhost';
-    select * from comentarios_por_alumno;
+	-- revoke select on *.* from 'administrador'@'localhost'; -- Lo hacemos como administrador
+    select * from comentarios_por_alumno; -- Lo hacemos como administrador
+    
+-- EJ 10. Crea un nuevo usuario llamado alumno con la contraseña pass_alum. Explica qué ocurre y que debemos hacer para poder crearlos.
+    -- create user 'alumno'@'localhost' identified by 'pass_alum'; -- Creamos el usuario como administrador
+    
+-- EJ 11. Otorga a este nuevo usuario permiso de conexión y consulta de datos.
+	grant select on boletin0_dcl.* to 'alumno'@'localhost'; -- Lo hacemos como administrador
+    
+-- EJ 12. Con el usuario alumno, modifica la tabla alumno creada anteriormente e intenta añadir la columna apellidos de tipo Varchar analizando en todo momento lo que ocurre
+	-- grant alter on boletin0_dcl.* to 'alumno'@'localhost'; -- Lo hacemos como administrador
+	-- alter table alumno add column apellidos varchar(250); -- Lo hacemos como alumno
+    select * from alumno; -- Lo hacemos como alumno
+    
+-- EJ 13. Elimina al usuario alumno.
+	drop user 'alumno'@'localhost'; -- Lo hacemos como administrador
