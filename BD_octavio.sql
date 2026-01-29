@@ -96,3 +96,108 @@ values
     from partido
     where puntos_b > puntos_a 
 		and fecha between '2026-01-01' and '2026-03-31';
+        
+-- ---------------------------------------------------------------------------------------
+
+use almacen;
+
+select * from almacen;
+
+-- Cuantos dias faltan para que se comercialice el producto Huawei free clips
+	select timestampdiff(day, now(), fecha_comer)
+	from almacen
+	where producto = "Huawei Free Clips";
+
+-- Mostrar el nombre del producto y el redondeo entero de su precio para aquellos adquiridos al proveedor apple (27)
+	select producto, round(precio_unit) as redondeo_precio
+    from almacen
+    where id_proveedor = 27;
+    
+-- Mostrar el nombre del producto y el redondeo entero de su precio para aquellos adquiridos al proveedor apple (27) o que su precio supere los 500
+	select producto, round(precio_unit) as redondeo_precio
+    from almacen
+    where (id_proveedor = 27) 
+		or (precio_unit > 500);
+        
+-- Mostrar el nombre del producto y el redondeo entero de su precio para aquellos adquiridos al proveedor apple (27) o que su precio supere los 500
+-- Todos los productos que se muestren deben cumplir que su cantidad sea inferior ectrictamente a la cantidad máxima que podemos almacenar de ellos
+	select producto, round(precio_unit) as redondeo_precio, cantidad, cantidad_max
+    from almacen
+    where (id_proveedor = 27 or precio_unit > 500)
+        and cantidad < cantidad_max;
+        
+-- Muestra aquellos productos cuya cantidad máxima es un número par, estan adquiridas a proveedores cuyo id se encuentra entre 20 y 30
+-- y su nombre contiene la i o la a
+	select producto, cantidad_max, id_proveedor
+    from almacen
+    where cantidad_max % 2 = 0 
+		and id_proveedor between 20 and 30 
+		and (producto like '%i%' or producto like '%a%');
+        
+-- Muestra aquellos productos comercializados en 2024 cuya diferencia entre cantidad_max y actual supera las 30 unidades o su precio unitario es
+-- inferior a 500
+	select *
+    from almacen
+    where year(fecha_comer) = 2024
+		and ((cantidad_max - cantidad) > 30 or (precio_unit < 500));
+        
+-- Muestra aquellos productos comercializados en 2024 cuya diferencia entre cantidad_max y actual supera las 30 unidades o su precio unitario es
+-- inferior a 500 para todos aquellos productos adquiridos a los proveedores 27 o 29
+	select *
+    from almacen
+    where year(fecha_comer) = 2024
+		and ((cantidad_max - cantidad) > 30 or (precio_unit < 500))
+        and id_proveedor in (27, 29);
+        
+-- Muestrame el producto más caro
+	select *
+    from almacen
+    order by precio_unit desc
+    limit 1;
+    
+    -- Funciones de agregado
+    select MAX(precio_unit) from almacen;
+    select MIN(precio_unit) from almacen;
+    select SUM(precio_unit) from almacen;
+    select avg(precio_unit) from almacen;
+    select count(*) from almacen;
+    
+    select MAX(precio_unit), id_proveedor 
+    from almacen
+    group by id_proveedor;
+    
+    -- Subconsulta del producto más caro
+    select * 
+    from almacen 
+    where precio_unit = (select MAX(precio_unit) from almacen);
+    
+-- Muestra para cada proveedor el num de productos que tiene
+	select count(producto), id_proveedor
+    from almacen
+    group by id_proveedor;
+    
+-- Muestra para cada proveedor la cantidad total de productos que tiene
+	select SUM(cantidad), id_proveedor
+    from almacen
+    group by id_proveedor;
+    
+-- Muestra para cada proveedor la cantidad total de productos que tiene ordenado de mayor a menor
+	select SUM(cantidad) as cantidad_total, id_proveedor
+    from almacen
+    group by id_proveedor
+    order by cantidad_total desc;
+    
+-- Muestra para cada proveedor la cantidad total de productos que tiene ordenado de mayor a menor para los proveedores 26 y 29
+	select SUM(cantidad) as cantidad_total, id_proveedor
+    from almacen
+    where id_proveedor in (26, 29)
+    group by id_proveedor
+    order by cantidad_total desc;
+    
+-- Muestra para cada proveedor la cantidad total de productos que tiene ordenado de mayor a menor para los proveedores 26 y 29 siempre y cuando dicha cantidad supere los 120
+	select SUM(cantidad) as cantidad_total, id_proveedor
+    from almacen
+    where id_proveedor in (26, 29)
+    group by id_proveedor
+    having cantidad_total > 120
+    order by cantidad_total desc;
