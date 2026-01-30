@@ -47,9 +47,9 @@ use banco;
 	group by tipo_movimiento.cod_tipo_mov;
     
 -- 10. Mostrar cuál es la cantidad media que sacan de cajero los clientes de nuestro banco.
-	select concat_ws(' ', cliente.nombre, cliente.apellidos) as nombre_completo, cuenta.cod_cuenta, round(avg(importe), 2) as media_retirada_cajero
+	select concat_ws(' ', cliente.nombre, cliente.apellidos) as nombre_completo, round(avg(importe), 2) as media_retirada_cajero
     from cliente
 		join cuenta on cliente.cod_cliente = cuenta.cod_cliente
 		join movimiento on cuenta.cod_cuenta = movimiento.cod_cuenta
 	where movimiento.cod_tipo_mov = 2
-    group by cod_cuenta;
+    group by cuenta.cod_cliente;
