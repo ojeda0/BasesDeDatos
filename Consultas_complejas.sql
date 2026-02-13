@@ -53,3 +53,10 @@ use banco;
 		join movimiento on cuenta.cod_cuenta = movimiento.cod_cuenta
 	where movimiento.cod_tipo_mov = 2
     group by cuenta.cod_cliente;
+    
+-- Prueba
+select *
+from cliente
+where nombre like 'A%o';
+
+select * from cliente;
