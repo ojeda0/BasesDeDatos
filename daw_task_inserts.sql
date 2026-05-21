@@ -1,3 +1,5 @@
+use daw_task;
+
 INSERT INTO tarea (titulo, descripcion, fecha_creacion, fecha_vencimiento, estado) VALUES
 ('Configurar entorno', 'Instalar Docker y levantar contenedores locales', '2026-03-01', '2026-03-05', 'COMPLETADA'),
 ('Migración de registros', 'Pasar el histórico de usuarios del sistema antiguo al nuevo', '2026-03-10', '2026-03-15', 'COMPLETADA'),
